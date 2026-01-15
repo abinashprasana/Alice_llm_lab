@@ -1,0 +1,181 @@
+
+# 🧠📚 Alice LLM Lab  
+*A Tiny Transformer Language Model with Retrieval-Augmented Generation*
+
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-Used-EE4C2C?logo=pytorch&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?logo=streamlit&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?logo=sqlite&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Learning_Project-FBC02D)
+
+---
+
+## 📌 Project Overview
+
+Alice LLM Lab is a **custom transformer-based language model** trained on *Alice’s Adventures in Wonderland*.  
+The project was built as a **hands-on learning exercise** to understand how modern language models work internally, starting from raw text preprocessing, moving through training a transformer from scratch, and extending generation using retrieval-based context.
+
+The system uses a character-level modeling approach, explicit train and validation splits, checkpointed training, and loss tracking to make learning behavior visible.  
+For grounding generation, processed text is chunked and stored in a local SQLite database, allowing relevant context to be retrieved and injected into prompts when required.
+
+Everything runs locally and the focus is on **clarity, experimentation, and understanding**, rather than production scale optimization.
+
+---
+
+## 🎯 What this project lets you do
+
+• Train a small transformer language model from raw text  
+• Observe training behavior through validation loss and checkpoints  
+• Generate text in the style of the training corpus  
+• Experiment with retrieval-augmented generation using local data  
+• Interact with the model through a simple Streamlit interface  
+
+This project is intentionally scoped to make each part of the pipeline understandable without hiding logic behind external services.
+
+---
+
+## 🧠 How the system works (high level)
+
+The project follows a clear and traceable flow:
+
+1. Raw text is cleaned and normalized  
+2. The processed text is split into training and validation data  
+3. Text is chunked and stored in SQLite for retrieval  
+4. A character-level transformer is trained using PyTorch  
+5. Relevant text chunks are retrieved using TF-IDF similarity  
+6. Retrieved context is optionally combined with prompts during generation  
+
+This approach keeps generated output tied closely to the original dataset when retrieval is enabled.
+
+---
+
+<details>
+<summary>🗂️ <strong>Project structure (click to expand)</strong></summary>
+
+```text
+alice-mini-llm/
+│
+├── app/
+│   └── streamlit_app.py
+│
+├── data/
+│   ├── raw/
+│   │   └── alice.txt
+│   ├── processed/
+│   │   ├── alice_clean.txt
+│   │   ├── chunks.jsonl
+│   │   ├── train.txt
+│   │   └── val.txt
+│   └── texts.db
+│
+├── outputs/
+│   ├── checkpoints/
+│   │   ├── model.pt
+│   │   ├── model_best.pt
+│   │   └── model_latest.pt
+│   └── plots/
+│       └── loss.png
+│
+├── src/
+│   ├── data_prep/
+│   ├── model/
+│   ├── rag/
+│   ├── eval/
+│   ├── config.py
+│   └── inference.py
+│
+├── Execution_Guide.md
+├── Project_Report.md
+├── requirements.txt
+└── pyproject.toml
+```
+</details>
+
+---
+
+<details>
+<summary>⚙️ <strong>Setup and execution (click to expand)</strong></summary>
+
+### Create a virtual environment
+```
+python -m venv .venv
+```
+
+Activate it:
+
+Windows (PowerShell)
+```
+.venv\Scripts\Activate.ps1
+```
+
+macOS / Linux
+```
+source .venv/bin/activate
+```
+
+### Install dependencies
+```
+pip install -r requirements.txt
+```
+
+### Prepare the dataset
+```
+python src/data_prep/dataset_builder.py
+```
+
+### Train the model
+```
+python src/model/train.py
+```
+
+### Generate text
+Standard generation:
+```
+python src/model/generate.py --prompt "Alice was beginning to"
+```
+
+Retrieval-augmented generation:
+```
+python src/rag/rag_generate.py --prompt "Who is the Queen of Hearts?" --top_k 3
+```
+
+### Run the Streamlit app
+```
+streamlit run app/streamlit_app.py
+```
+</details>
+
+---
+
+## 🎥 Demo video
+
+You can add a short demo video here showing:
+• Dataset preparation  
+• Training progress  
+• Text generation  
+• Streamlit interaction  
+
+**Demo link:**  
+```
+<replace this with your video link>
+```
+
+---
+
+<details>
+<summary>⚠️ <strong>Notes and limitations (click to expand)</strong></summary>
+
+• This is a learning-focused prototype  
+• The model is intentionally small and trained on limited data  
+• Retrieval quality depends on chunking and TF-IDF similarity  
+• Performance depends on local hardware  
+
+</details>
+
+---
+
+## 🙌 Author
+
+**Abinash Prasana Selvanathan**  
+
+⭐ If you found this project useful, feel free to star the repository.
