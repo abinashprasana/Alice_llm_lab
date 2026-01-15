@@ -1,190 +1,238 @@
+# 🧠 Alice LLM Lab  
+*A Character-Level Transformer with Retrieval-Augmented Generation*
 
-# 🧠📚 Alice LLM Lab  
-*A Tiny Transformer Language Model with Retrieval-Augmented Generation*
+<div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-Used-EE4C2C?logo=pytorch&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0-EE4C2C?logo=pytorch&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?logo=streamlit&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?logo=sqlite&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Learning_Project-FBC02D)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+A learning project that builds a transformer language model from scratch, trained on *Alice's Adventures in Wonderland* with retrieval-augmented generation capabilities.
+
+[Quick Start](#-quick-start) • [Features](#-features) • [Architecture](#-architecture) • [Usage](#-usage)
+
+</div>
 
 ---
 
-## 📌 Project Overview
+## 🎯 Overview
 
-Alice LLM Lab is a custom transformer-based language model trained on *Alice’s Adventures in Wonderland*.  
-This project was built as a hands-on learning exercise to understand how language models work end to end, starting from raw text preparation, moving through training a transformer from scratch, and extending generation using retrieval-based context.
+This project implements a complete end-to-end language model pipeline—from raw text preprocessing to an interactive generation interface. Built entirely from scratch using PyTorch, it demonstrates core concepts in modern NLP without relying on pre-trained models or external APIs.
 
-The model operates at a character level, uses explicit training and validation splits, and saves checkpoints and loss plots during training so learning behavior is visible.  
-To keep generated responses grounded, processed text is chunked and stored in a local SQLite database, allowing relevant passages to be retrieved and injected into prompts when needed.
-
-Everything runs locally and the focus is on clarity, experimentation, and understanding rather than production scale optimization.
-
----
-
-## 📍 What this project is
-
-Alice LLM Lab is a learning-focused project that lets you:
-
-• Train a small transformer language model from raw text  
-• Observe how training progresses through checkpoints and loss curves  
-• Generate text in the style of the training corpus  
-• Experiment with retrieval-augmented generation using local data  
-• Interact with the model through a simple Streamlit interface  
-
-> ℹ️ **Note**  
-> The model is trained from scratch on the provided dataset and runs entirely on your local machine. No external model APIs are used.
+**What makes this different:**
+- Transformer built from first principles (self-attention, positional encoding, layer norm)
+- Character-level tokenization for maximum transparency
+- Integrated RAG system using TF-IDF retrieval from SQLite
+- Full training observability with checkpoints and loss visualization
+- Everything runs locally
 
 ---
 
-## 🧠 How the system works
+## ✨ Features
 
-At a high level, the system follows a simple and traceable flow:
-
-1. Raw text is cleaned and normalized  
-2. The processed text is split into training and validation data  
-3. Text is chunked and stored in SQLite for retrieval  
-4. A character-level transformer is trained using PyTorch  
-5. Relevant text chunks are retrieved using TF-IDF similarity  
-6. Retrieved context is optionally combined with prompts during generation  
+- **🔧 Custom Transformer** — Multi-head self-attention architecture built with PyTorch
+- **📊 Training Pipeline** — Proper train/val splits, checkpointing, and loss tracking
+- **🔍 RAG System** — TF-IDF-based retrieval from SQLite database for grounded generation
+- **🎨 Interactive UI** — Streamlit interface for experimentation
+- **📈 Visualization** — Training loss plots and generation monitoring
+- **⚡ Fast Setup** — Single command installation and training
 
 ---
 
-## 🔗 How the programs are connected
+## 🏗️ Architecture
 
-The pipeline begins with dataset preparation, where raw text is cleaned, split, chunked, and stored in a SQLite database.  
-The training module then consumes this prepared data and produces model checkpoints and loss visualizations.
+```mermaid
+graph LR
+    A[Raw Text] --> B[Data Prep]
+    B --> C[Train/Val Split]
+    B --> D[SQLite DB]
+    C --> E[Transformer Training]
+    E --> F[Model Checkpoints]
+    D --> G[TF-IDF Retrieval]
+    F --> H[Generation]
+    G --> H
+    H --> I[Streamlit UI]
+```
 
-For inference, standard generation loads the trained model directly, while retrieval-augmented generation first searches the SQLite database for relevant context before generating text.  
-The Streamlit application provides a single interface that ties these components together for interactive experimentation.
+**Pipeline Flow:**
+1. Text preprocessing and cleaning
+2. Character-level tokenization and dataset creation
+3. Chunk storage in SQLite with TF-IDF indexing
+4. Transformer training with validation monitoring
+5. Optional context retrieval for generation
+6. Interactive inference through Streamlit
 
 ---
 
-## 📤 Outputs generated
-
-Running the project produces:
-
-• Cleaned and processed text files  
-• Chunked text stored in SQLite  
-• Trained model checkpoints  
-• Training loss plot  
-• Generated text samples  
-
----
-
-## 🗂️ Project structure
+## 📁 Project Structure
 
 ```
 alice-mini-llm/
-│
-├── app/                         # Application layer
-│   └── streamlit_app.py         # Streamlit UI for interactive inference
-│
-├── data/                        # Dataset storage
-│   ├── raw/                     # Original input data
-│   │   └── alice.txt            # Raw Alice in Wonderland text
-│   │
-│   ├── processed/               # Cleaned and prepared data
-│   │   ├── alice_clean.txt      # Normalized text after cleaning
-│   │   ├── chunks.jsonl         # Text chunks used for retrieval
-│   │   ├── train.txt            # Training split
-│   │   └── val.txt              # Validation split
-│   │
-│   └── texts.db                 # SQLite database for retrieval
-│
-├── outputs/                     # Generated artifacts
-│   ├── checkpoints/             # Saved model checkpoints
-│   │   ├── model.pt             # Final trained model
-│   │   ├── model_best.pt        # Best performing checkpoint
-│   │   └── model_latest.pt      # Most recent checkpoint
-│   │
+├── app/
+│   └── streamlit_app.py         # Interactive web interface
+├── data/
+│   ├── raw/alice.txt            # Source corpus
+│   ├── processed/               # Cleaned data & splits
+│   └── texts.db                 # Retrieval database
+├── outputs/
+│   ├── checkpoints/             # Model weights
 │   └── plots/                   # Training visualizations
-│       └── loss.png             # Training loss curve
-│
-├── src/                         # Core source code
-│   ├── data_prep/               # Dataset preparation logic
-│   ├── model/                   # Transformer, training, generation code
-│   ├── rag/                     # Retrieval and RAG logic
-│   ├── eval/                    # Evaluation utilities
-│   ├── config.py                # Central configuration
-│   └── inference.py             # Shared inference helpers
-│
-├── Execution_Guide.md            # Step-by-step execution guide
-├── Project_Report.md             # Detailed project explanation
-├── requirements.txt             # Python dependencies
-└── pyproject.toml                # Project configuration
+├── src/
+│   ├── data_prep/               # Preprocessing pipeline
+│   ├── model/                   # Transformer & training
+│   ├── rag/                     # Retrieval system
+│   └── config.py                # Configuration
+└── requirements.txt
 ```
 
 ---
 
-## ⚙️ Setup and execution
+## 🚀 Quick Start
 
-Create a virtual environment:
-```
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/alice-mini-llm.git
+cd alice-mini-llm
+
+# Create virtual environment
 python -m venv .venv
-```
+source .venv/bin/activate  # On Windows: .venv\Scripts\Activate.ps1
 
-Activate it:
-
-Windows (PowerShell)
-```
-.venv\Scripts\Activate.ps1
-```
-
-macOS / Linux
-```
-source .venv/bin/activate
-```
-
-Install dependencies:
-```
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-Prepare the dataset:
-```
+### Usage
+
+**1. Prepare Dataset**
+```bash
 python src/data_prep/dataset_builder.py
 ```
 
-Train the model:
-```
+**2. Train Model**
+```bash
 python src/model/train.py
 ```
+*Training takes 10-30 minutes depending on hardware*
 
-Generate text:
-```
-python src/model/generate.py --prompt "Alice was beginning to"
+**3. Generate Text**
+```bash
+python src/model/generate.py --prompt "Alice was beginning to" --temperature 0.8
 ```
 
-Run the Streamlit app:
-```
+**4. Launch UI**
+```bash
 streamlit run app/streamlit_app.py
 ```
 
 ---
 
-## 🎥 Demo video
+## 💡 Usage Examples
 
-You can add a short demo video here showing the dataset preparation, training process, and interactive generation.
+### Standard Generation
+```bash
+python src/model/generate.py \
+  --prompt "The Cheshire Cat" \
+  --max_length 200 \
+  --temperature 0.7
+```
 
-Demo link:
+### RAG-Enhanced Generation
+```bash
+python src/model/generate.py \
+  --prompt "What did the Caterpillar say?" \
+  --use_rag \
+  --max_length 150
 ```
-<replace this with your demo video link>
-```
+
+### Custom Configuration
+Edit `src/config.py` to modify:
+- Model architecture (layers, heads, dimensions)
+- Training hyperparameters (learning rate, batch size)
+- Generation settings (temperature, sampling strategy)
 
 ---
 
-## ⚠️ Notes and limitations
+## 📊 Understanding Results
 
-• Learning-focused prototype  
-• Small model trained on limited data  
-• Retrieval quality depends on chunking and TF-IDF similarity  
-• Performance depends on local hardware  
+**Training Loss** — Monitor `outputs/plots/loss.png`:
+- Decreasing loss indicates learning
+- Train/val gap shows generalization
+- Plateau means convergence
+
+**Generation Quality** — Character-level models produce creative but sometimes incoherent text. This is expected for small models on limited data.
+
+**RAG Impact** — Compare outputs with/without `--use_rag` to see how retrieval grounds generation in source material.
 
 ---
 
-## 🙌 Author
+## 🛠️ Technical Stack
 
-**Abinash Prasana Selvanathan**  
+| Component | Technology |
+|-----------|-----------|
+| Framework | PyTorch 2.0 |
+| Interface | Streamlit |
+| Database | SQLite3 |
+| Retrieval | scikit-learn (TF-IDF) |
+| Visualization | matplotlib |
 
-⭐ If you found this project useful, feel free to star the repository.
+---
+
+## ⚠️ Limitations
+
+- Small model trained on single book (limited generalization)
+- Character-level tokenization (slower than subword methods)
+- TF-IDF retrieval (simpler than dense embeddings)
+- No GPU acceleration required but training is CPU-bound
+
+These are intentional tradeoffs for educational clarity.
+
+---
+
+## 🎓 Learning Outcomes
+
+By exploring this project, you'll understand:
+- Transformer architecture internals
+- Training loop implementation
+- Text generation strategies
+- RAG system design
+- End-to-end ML pipelines
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] Beam search decoding
+- [ ] Subword tokenization (BPE)
+- [ ] Dense retrieval with embeddings
+- [ ] Evaluation metrics (perplexity, BLEU)
+- [ ] Multi-GPU training support
+- [ ] API endpoint for generation
+
+---
+
+## 📄 License
+
+MIT License - feel free to use for learning and experimentation.
+
+---
+
+## 👤 Author
+
+**Abinash Prasana Selvanathan**
+
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717?logo=github)](https://github.com/yourusername)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](https://linkedin.com/in/yourprofile)
+
+---
+
+<div align="center">
+
+**⭐ Star this repo if you found it helpful!**
+
+Built with 💙 as a deep dive into transformer architectures and RAG systems
+
+</div>
