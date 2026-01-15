@@ -1,16 +1,17 @@
-# 🧠 Alice LLM Lab  
-*A Character-Level Transformer with Retrieval-Augmented Generation*
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.0-EE4C2C?logo=pytorch&logoColor=white)
+# 🧠 Alice LLM Lab  
+*A Character-Level Transformer with Retrieval-Augmented Generation*
+
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-Powered-EE4C2C?logo=pytorch&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?logo=streamlit&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+![SQLite](https://img.shields.io/badge/SQLite-Local_DB-003B57?logo=sqlite&logoColor=white)
 
-A learning project that builds a transformer language model from scratch, trained on *Alice's Adventures in Wonderland* with retrieval-augmented generation capabilities.
-
-[Quick Start](#-quick-start) • [Features](#-features) • [Architecture](#-architecture) • [Usage](#-usage)
+A learning-focused project that builds a transformer language model from scratch,
+trained on *Alice’s Adventures in Wonderland*, with retrieval-augmented generation
+to keep outputs grounded in the source text.
 
 </div>
 
@@ -18,25 +19,25 @@ A learning project that builds a transformer language model from scratch, traine
 
 ## 🎯 Overview
 
-This project implements a complete end-to-end language model pipeline—from raw text preprocessing to an interactive generation interface. Built entirely from scratch using PyTorch, it demonstrates core concepts in modern NLP without relying on pre-trained models or external APIs.
+This project demonstrates an end-to-end language modeling pipeline, starting from raw text preprocessing and extending through model training, text generation, and interactive inference.
 
-**What makes this different:**
-- Transformer built from first principles (self-attention, positional encoding, layer norm)
-- Character-level tokenization for maximum transparency
-- Integrated RAG system using TF-IDF retrieval from SQLite
-- Full training observability with checkpoints and loss visualization
-- Everything runs locally
+The transformer is implemented directly in PyTorch and trained at the character level to keep all internal mechanics transparent. To improve contextual grounding during generation, relevant passages are retrieved from a local SQLite database using TF-IDF similarity and incorporated into the prompt when needed.
+
+Everything runs locally, with an emphasis on understanding how each component fits together rather than optimizing for production scale.
 
 ---
 
-## ✨ Features
+## 🧠 How it works
 
-- **🔧 Custom Transformer** — Multi-head self-attention architecture built with PyTorch
-- **📊 Training Pipeline** — Proper train/val splits, checkpointing, and loss tracking
-- **🔍 RAG System** — TF-IDF-based retrieval from SQLite database for grounded generation
-- **🎨 Interactive UI** — Streamlit interface for experimentation
-- **📈 Visualization** — Training loss plots and generation monitoring
-- **⚡ Fast Setup** — Single command installation and training
+The system follows a clear and traceable flow:
+
+1. Raw text is cleaned and normalized  
+2. Cleaned text is split into training and validation sets  
+3. Text chunks are stored in a local SQLite database  
+4. A character-level transformer is trained using PyTorch  
+5. Relevant chunks are retrieved using TF-IDF similarity  
+6. Retrieved context can be combined with prompts during generation  
+7. A Streamlit interface provides interactive access to the model  
 
 ---
 
@@ -44,179 +45,125 @@ This project implements a complete end-to-end language model pipeline—from raw
 
 ```mermaid
 graph LR
-    A[Raw Text] --> B[Data Prep]
-    B --> C[Train/Val Split]
-    B --> D[SQLite DB]
+    A[Raw Text] --> B[Data Preparation]
+    B --> C[Train / Validation Split]
+    B --> D[SQLite Database]
     C --> E[Transformer Training]
     E --> F[Model Checkpoints]
     D --> G[TF-IDF Retrieval]
-    F --> H[Generation]
+    F --> H[Text Generation]
     G --> H
-    H --> I[Streamlit UI]
+    H --> I[Streamlit Interface]
 ```
-
-**Pipeline Flow:**
-1. Text preprocessing and cleaning
-2. Character-level tokenization and dataset creation
-3. Chunk storage in SQLite with TF-IDF indexing
-4. Transformer training with validation monitoring
-5. Optional context retrieval for generation
-6. Interactive inference through Streamlit
 
 ---
 
-## 📁 Project Structure
+## 🔗 How the programs connect
+
+Dataset preparation handles text cleaning, chunking, and database creation.  
+The training module consumes the prepared data and produces model checkpoints and loss visualizations.
+
+During inference, generation can either rely solely on the trained model or first retrieve relevant context from SQLite before generating text.  
+The Streamlit app acts as a thin orchestration layer, exposing these capabilities through a simple user interface.
+
+---
+
+## 📤 Outputs you will see
+
+Running the project produces:
+
+• Processed training and validation text files  
+• Chunked text stored in SQLite  
+• Saved model checkpoints  
+• Training loss plots  
+• Generated text samples from CLI and UI  
+
+---
+
+## 📁 Project structure
 
 ```
 alice-mini-llm/
-├── app/
-│   └── streamlit_app.py         # Interactive web interface
-├── data/
-│   ├── raw/alice.txt            # Source corpus
-│   ├── processed/               # Cleaned data & splits
-│   └── texts.db                 # Retrieval database
-├── outputs/
-│   ├── checkpoints/             # Model weights
-│   └── plots/                   # Training visualizations
-├── src/
-│   ├── data_prep/               # Preprocessing pipeline
-│   ├── model/                   # Transformer & training
-│   ├── rag/                     # Retrieval system
-│   └── config.py                # Configuration
-└── requirements.txt
+├── app/                         # Streamlit user interface
+│   └── streamlit_app.py
+│
+├── data/                        # Dataset storage
+│   ├── raw/                     # Original text
+│   │   └── alice.txt
+│   ├── processed/               # Cleaned data and splits
+│   │   ├── alice_clean.txt
+│   │   ├── train.txt
+│   │   ├── val.txt
+│   │   └── chunks.jsonl
+│   └── texts.db                 # SQLite retrieval database
+│
+├── outputs/                     # Generated artifacts
+│   ├── checkpoints/             # Model checkpoints
+│   └── plots/                   # Training loss visualization
+│
+├── src/                         # Core implementation
+│   ├── data_prep/               # Dataset preparation logic
+│   ├── model/                   # Transformer, training, generation
+│   ├── rag/                     # Retrieval logic
+│   ├── eval/                    # Evaluation utilities
+│   ├── config.py                # Central configuration
+│   └── inference.py             # Shared inference helpers
+│
+├── Execution_Guide.md
+├── Project_Report.md
+├── requirements.txt
+└── pyproject.toml
 ```
 
 ---
 
-## 🚀 Quick Start
-
-### Installation
+## ⚙️ Setup and run
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/alice-mini-llm.git
-cd alice-mini-llm
-
-# Create virtual environment
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\Activate.ps1
-
-# Install dependencies
+source .venv/bin/activate   # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-### Usage
-
-**1. Prepare Dataset**
+Prepare data:
 ```bash
 python src/data_prep/dataset_builder.py
 ```
 
-**2. Train Model**
+Train model:
 ```bash
 python src/model/train.py
 ```
-*Training takes 10-30 minutes depending on hardware*
 
-**3. Generate Text**
+Generate text:
 ```bash
-python src/model/generate.py --prompt "Alice was beginning to" --temperature 0.8
+python src/model/generate.py --prompt "Alice was beginning to"
 ```
 
-**4. Launch UI**
+Run the UI:
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
 ---
 
-## 💡 Usage Examples
+## 🎥 Demo
 
-### Standard Generation
-```bash
-python src/model/generate.py \
-  --prompt "The Cheshire Cat" \
-  --max_length 200 \
-  --temperature 0.7
+Add a short demo video here showing training, generation, and Streamlit interaction.
+
+Demo link:
+```
+<add demo video link here>
 ```
 
-### RAG-Enhanced Generation
-```bash
-python src/model/generate.py \
-  --prompt "What did the Caterpillar say?" \
-  --use_rag \
-  --max_length 150
-```
-
-### Custom Configuration
-Edit `src/config.py` to modify:
-- Model architecture (layers, heads, dimensions)
-- Training hyperparameters (learning rate, batch size)
-- Generation settings (temperature, sampling strategy)
-
 ---
 
-## 📊 Understanding Results
+## ⚠️ Notes and limitations
 
-**Training Loss** — Monitor `outputs/plots/loss.png`:
-- Decreasing loss indicates learning
-- Train/val gap shows generalization
-- Plateau means convergence
-
-**Generation Quality** — Character-level models produce creative but sometimes incoherent text. This is expected for small models on limited data.
-
-**RAG Impact** — Compare outputs with/without `--use_rag` to see how retrieval grounds generation in source material.
-
----
-
-## 🛠️ Technical Stack
-
-| Component | Technology |
-|-----------|-----------|
-| Framework | PyTorch 2.0 |
-| Interface | Streamlit |
-| Database | SQLite3 |
-| Retrieval | scikit-learn (TF-IDF) |
-| Visualization | matplotlib |
-
----
-
-## ⚠️ Limitations
-
-- Small model trained on single book (limited generalization)
-- Character-level tokenization (slower than subword methods)
-- TF-IDF retrieval (simpler than dense embeddings)
-- No GPU acceleration required but training is CPU-bound
-
-These are intentional tradeoffs for educational clarity.
-
----
-
-## 🎓 Learning Outcomes
-
-By exploring this project, you'll understand:
-- Transformer architecture internals
-- Training loop implementation
-- Text generation strategies
-- RAG system design
-- End-to-end ML pipelines
-
----
-
-## 🔮 Future Improvements
-
-- [ ] Beam search decoding
-- [ ] Subword tokenization (BPE)
-- [ ] Dense retrieval with embeddings
-- [ ] Evaluation metrics (perplexity, BLEU)
-- [ ] Multi-GPU training support
-- [ ] API endpoint for generation
-
----
-
-## 📄 License
-
-MIT License - feel free to use for learning and experimentation.
+• Learning-focused prototype  
+• Small model trained on limited data  
+• TF-IDF retrieval quality depends on chunking  
+• Performance depends on local hardware  
 
 ---
 
@@ -224,15 +171,4 @@ MIT License - feel free to use for learning and experimentation.
 
 **Abinash Prasana Selvanathan**
 
-[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717?logo=github)]((https://github.com/abinashprasana))
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](www.linkedin.com/in/abinash-prasana-s-2515b7221)
-
----
-
-<div align="center">
-
-**⭐ Star this repo if you found it helpful!**
-
-Built with 💙 as a deep dive into transformer architectures and RAG systems
-
-</div>
+⭐ If you found this project useful, feel free to star the repository.
