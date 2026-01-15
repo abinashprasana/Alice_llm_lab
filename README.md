@@ -224,8 +224,8 @@ MIT License - feel free to use for learning and experimentation.
 
 **Abinash Prasana Selvanathan**
 
-[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717?logo=github)](https://github.com/yourusername)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](https://linkedin.com/in/yourprofile)
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717?logo=github)]((https://github.com/abinashprasana))
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](www.linkedin.com/in/abinash-prasana-s-2515b7221)
 
 ---
 
