@@ -1,0 +1,15 @@
+pyproject.toml
+alice_mini_llm.egg-info/PKG-INFO
+alice_mini_llm.egg-info/SOURCES.txt
+alice_mini_llm.egg-info/dependency_links.txt
+alice_mini_llm.egg-info/requires.txt
+alice_mini_llm.egg-info/top_level.txt
+src/config.py
+src/inference.py
+src/data_prep/dataset_builder.py
+src/eval/metrics.py
+src/model/generate.py
+src/model/train.py
+src/model/transformer.py
+src/rag/rag_generate.py
+src/rag/retriever.py
