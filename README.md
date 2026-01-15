@@ -1,4 +1,4 @@
-# 🧠 Alice LLM Lab  
+                # 🧠 Alice LLM Lab  
 *A Character-Level Transformer with Retrieval-Augmented Generation*
 
 <div align="center">
