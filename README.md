@@ -149,12 +149,7 @@ streamlit run app/streamlit_app.py
 
 ## 🎥 Demo
 
-Add a short demo video here showing training, generation, and Streamlit interaction.
-
-Demo link:
-```
-<add demo video link here>
-```
+https://github.com/user-attachments/assets/408ab851-1a6c-4491-b7a6-8aa4e77f990b
 
 ---
 
